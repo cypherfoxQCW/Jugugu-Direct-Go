@@ -1,0 +1,292 @@
+openapi: 3.0.1
+info:
+  description: 接入jugugu区块链全包的全部接口，访问IP需要连续管理员，添加业务服务器IP
+  title: 直接模式
+  version: 1.0.0
+servers:
+- url: /
+tags:
+- name: 快捷接入模式
+- name: 快捷接入模式/检测
+- name: 快捷接入模式/注册
+- name: 快捷接入模式/登录
+paths:
+  /IsPhoneReg:
+    post:
+      deprecated: false
+      description: 检查手机号是否注册，返回“true”和“false”字符串
+      parameters: []
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object'
+        content:
+          application/json:
+            example:
+              phone: ""
+            schema:
+              properties:
+                phone:
+                  description: 此处传参为空字符串
+                  title: 国内手机号
+                  type: string
+              required:
+              - phone
+              type: object
+              x-apifox-orders:
+              - phone
+      responses:
+        "200":
+          content:
+            '*/*':
+              examples: {}
+              schema:
+                $ref: '#/components/schemas/inline_response_200'
+          description: 成功
+      summary: 检查手机号是否注册
+      tags:
+      - 快捷接入模式/检测
+      x-apifox-folder: 快捷接入模式/检测
+      x-apifox-status: developing
+  /Jugugug_RegAndVerifyandReturnInfo:
+    post:
+      deprecated: false
+      description: |-
+        注册jugugu，注意三点
+        1.phone的传参必须为11位的国内手机号。
+        2.robotcodeid和robotcode是通过【①】获得
+        3.code短信验证码通过【②】
+        4.paymentpassword区块链短密钥，该密钥为用户进行链上交互使用，密钥设置长度>9位，且包含0-1 A-B a-b 已经特殊字符[~!@#$%^&*?_+;',./\|·！￥（）{}：“《》？、，。；’”"《》…-]+
+      parameters: []
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_1'
+        content:
+          application/json:
+            example:
+              phone: "18184182438"
+              robotcode: jmci7
+              robotcodeid: 93ddwedQffsss
+              code: "541231"
+              paymentpassword: Duis123456@
+            schema:
+              properties:
+                phone:
+                  description: 此处传参为空字符串
+                  title: 国内手机号
+                  type: string
+                robotcodeid:
+                  title: 验证码图片的ID
+                  type: string
+                robotcode:
+                  title: 验证码图片的识别结果
+                  type: string
+                code:
+                  title: 短信验证码
+                  type: string
+                paymentpassword:
+                  description: 该密钥为用户进行链上交互使用，密钥设置长度>9位，且包含0-1 A-B a-b 已经特殊字符[~!@#$%^&*?_+;',./\|·！￥（）{}：“《》？、，。；’”"《》…-]+
+                  title: 区块链短密钥
+                  type: string
+              required:
+              - code
+              - paymentpassword
+              - phone
+              - robotcode
+              - robotcodeid
+              type: object
+              x-apifox-orders:
+              - phone
+              - robotcodeid
+              - robotcode
+              - code
+              - paymentpassword
+      responses:
+        "200":
+          content:
+            application/json:
+              examples:
+                "1":
+                  summary: 成功示例
+                  value:
+                    state: "1"
+                    msg: ""
+                    phone: "17198118859"
+                    virifycodeid: ""
+                    virifyimage: ""
+                    confluxaddress: cfxtest:aamhv4pp61bwdjgsg7p2jyzhfatwjbgsp2321p8efc
+                    ethaddress: 0xe478e98CE5c321A0Ce37598452a7281f2404ce66
+                    token: 000025f8bd7efe26a7a1d4303ad2a109b02d3804406645a0279a0a04c69cac45
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+          description: 成功
+      summary: ③注册Jugugu
+      tags:
+      - 快捷接入模式/注册
+      x-apifox-folder: 快捷接入模式/注册
+      x-apifox-status: developing
+  /Jugugu_LoginCodeandReturnInfo:
+    post:
+      deprecated: false
+      description: 获取用于防御机器人的验证码图片，phone的传参必须为空字符串
+      parameters: []
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object_2'
+        content:
+          application/json:
+            example:
+              phone: ""
+            schema:
+              properties:
+                phone:
+                  description: 此处传参为空字符串
+                  title: 国内手机号
+                  type: string
+              required:
+              - phone
+              type: object
+              x-apifox-orders:
+              - phone
+      responses:
+        "200":
+          content:
+            application/json:
+              examples: {}
+              schema:
+                $ref: '#/components/schemas/inline_response_200_1'
+          description: 成功
+      summary: ①获取验证码图片
+      tags:
+      - 快捷接入模式/登录
+      x-apifox-folder: 快捷接入模式/登录
+      x-apifox-status: developing
+components:
+  requestBodies:
+    inline_object_1:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_1'
+    inline_object:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object'
+    inline_object_2:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/inline_object_2'
+  schemas:
+    inline_object:
+      properties:
+        phone:
+          description: 此处传参为空字符串
+          title: 国内手机号
+          type: string
+      required:
+      - phone
+      type: object
+      x-apifox-orders:
+      - phone
+    inline_response_200:
+      example:
+        token: token
+      properties:
+        token:
+          description: 用户登录识别令牌，用于后续多个函数的交互，作为输入参数
+          title: 通信令牌
+          type: string
+      required:
+      - token
+    inline_object_1:
+      properties:
+        phone:
+          description: 此处传参为空字符串
+          title: 国内手机号
+          type: string
+        robotcodeid:
+          title: 验证码图片的ID
+          type: string
+        robotcode:
+          title: 验证码图片的识别结果
+          type: string
+        code:
+          title: 短信验证码
+          type: string
+        paymentpassword:
+          description: 该密钥为用户进行链上交互使用，密钥设置长度>9位，且包含0-1 A-B a-b 已经特殊字符[~!@#$%^&*?_+;',./\|·！￥（）{}：“《》？、，。；’”"《》…-]+
+          title: 区块链短密钥
+          type: string
+      required:
+      - code
+      - paymentpassword
+      - phone
+      - robotcode
+      - robotcodeid
+      type: object
+      x-apifox-orders:
+      - phone
+      - robotcodeid
+      - robotcode
+      - code
+      - paymentpassword
+    inline_response_200_1:
+      example:
+        msg: msg
+        virifyimage: virifyimage
+        phone: phone
+        ethaddress: ethaddress
+        confluxaddress: confluxaddress
+        state: state
+        virifycodeid: virifycodeid
+        token: token
+      properties:
+        state:
+          description: 响应状态分为：-1,0,1 分别代表响应错误、响应提示、响应成功
+          title: 响应状态
+          type: string
+        msg:
+          description: 响应状态为-1时该值为错误信息。响应状态为0时，该值为响应提示信息。响应状态为1时该值为空字符串
+          title: 响应状态附带信息
+          type: string
+        phone:
+          title: 国内手机号
+          type: string
+        virifycodeid:
+          description: 验证码图片的ID值
+          title: 图片验证码ID
+          type: string
+        virifyimage:
+          description: data:image/png;base64
+          title: 验证码图片资源
+          type: string
+        confluxaddress:
+          description: 树图区块链地址
+          title: conflux地址
+          type: string
+        ethaddress:
+          description: 以太坊、Arbitrum、polygon、BSC等EVM链地址
+          title: Ethereum地址
+          type: string
+        token:
+          description: 用户登录识别令牌，用于后续多个函数的交互，作为输入参数
+          title: 通信令牌
+          type: string
+      required:
+      - confluxaddress
+      - ethaddress
+      - msg
+      - phone
+      - state
+      - token
+      - virifycodeid
+      - virifyimage
+    inline_object_2:
+      properties:
+        phone:
+          description: 此处传参为空字符串
+          title: 国内手机号
+          type: string
+      required:
+      - phone
+      type: object
+      x-apifox-orders:
+      - phone
